@@ -11,18 +11,16 @@ import java.util.Map;
 @NoArgsConstructor
 public class ExceptionResponse {
     private String message;
-    @JsonIgnore
     private String timeStamp;
     @JsonIgnore
     private String trace;
-    @JsonIgnore
-    private String path;
+    private String exception;
 
     /**
      * Constructor with parameters.
      */
     public ExceptionResponse(Map<String, Object> errorAttributes) {
-        this.setPath((String) errorAttributes.get("path"));
+        this.setException((String) errorAttributes.get("exception"));
         this.setMessage((String) errorAttributes.get("message"));
         this.setTimeStamp(errorAttributes.get("timestamp").toString());
         this.setTrace((String) errorAttributes.get("trace"));
