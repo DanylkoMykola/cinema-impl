@@ -17,9 +17,9 @@ public class MovieSpecification {
         return (root, cq, cb) -> cb.equal(root.get(Movie_.ID), id);
     }
     public Specification<Movie> hasName(String name) {
-        return (root, cq, cb) ->  cb.like(root.get(Movie_.name), "%" + name + "%");
+        return (root, cq, cb) ->  cb.like(root.get(Movie_.NAME), "%" + name + "%");
     }
     public Specification<Movie> hasReleaseDate(LocalDate dateTime) {
-        return (root, cq, cb) -> cb.equal(root.get(Movie_.releaseDate), dateTime);
+        return (root, cq, cb) -> cb.equal(root.get(Movie_.RELEASE_DATE), dateTime);
     }
 }
