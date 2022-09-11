@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+<changeSet id="v2022-09-10-1200-insert-data" author="Mykola Danylko">
+    <insert tableName="movies">
+        <column name="Id" value="1"/>
+        <column name="name" value="Thor 4"/>
+        <column name="release_date" valueDate="CURRENT_TIMESTAMP()"/>
+    </insert>
+    <insert tableName="movies">
+        <column name="Id" value="2"/>
+        <column name="name" value="Twilight"/>
+        <column name="release_date" valueDate="CURRENT_TIMESTAMP() - 100"/>
+    </insert>
+    <insert tableName="movies">
+        <column name="Id" value="3"/>
+        <column name="name" value="Matrix"/>
+        <column name="release_date" valueDate="CURRENT_TIMESTAMP() - 200"/>
+    </insert>
+    <insert tableName="orders">
+        <column name="customer_name" value="Edward"/>
+        <column name="price" value="14.25"/>
+        <column name="ordered_date" valueDate="CURRENT_TIMESTAMP()"/>
+        <column name="movie_id" value="2"/>
+    </insert>
+    <insert tableName="orders">
+        <column name="customer_name" value="Jack"/>
+        <column name="price" value="10.15"/>
+        <column name="ordered_date" valueDate="CURRENT_TIMESTAMP() - 20"/>
+        <column name="movie_id" value="1"/>
+    </insert>
+    <insert tableName="orders">
+        <column name="customer_name" value="Tom"/>
+        <column name="price" value="11.25"/>
+        <column name="ordered_date" valueDate="CURRENT_TIMESTAMP() - 10"/>
+        <column name="movie_id" value="1"/>
+    </insert>
+    <rollback>
+
+    </rollback>
+</changeSet>
+</databaseChangeLog>
+

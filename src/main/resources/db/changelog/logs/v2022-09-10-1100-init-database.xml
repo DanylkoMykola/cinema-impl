@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+<changeSet id="v2022-09-10-1100-insert-data" author="Mykola Danylko">
+    <createTable tableName="movies">
+         <column name="id" autoIncrement="true" type="bigint">
+              <constraints primaryKey="true"/>
+         </column>
+         <column name="name" type="varchar(255)">
+              <constraints nullable="true"/>
+          </column>
+         <column name="release_date" type="date" defaultValueDate="CURRENT_TIMESTAMP()">
+              <constraints nullable="true"/>
+         </column>
+    </createTable>
+    <createTable tableName="orders">
+          <column name="id" autoIncrement="true" type="bigint">
+               <constraints primaryKey="true"/>
+          </column>
+          <column name="customer_name" type="varchar(255)">
+             <constraints nullable="true"/>
+          </column>
+           <column name="price" type="numeric">
+                       <constraints nullable="true"/>
+                    </column>
+          <column name="ordered_date" type="timestamp" defaultValueDate="CURRENT_TIMESTAMP()">
+               <constraints nullable="true"/>
+          </column>
+          <column name="movie_id" type="bigint">
+               <constraints foreignKeyName="orders_movies_fk"
+                            references="movies(id)"
+                            nullable="false"/>
+          </column>
+    </createTable>
+</changeSet>
+</databaseChangeLog>
+
