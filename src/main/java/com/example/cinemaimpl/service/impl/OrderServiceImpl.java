@@ -51,11 +51,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     public void delete(Long id) {
-        if (orderRepo.existsById(id)) {
-            orderRepo.deleteById(id);
-        }  else {
-            throw  new NotFoundException(NOT_FOUND + id);
-        }
+        orderRepo.deleteById(id);
     }
 
    public Page<OrderWithMovieDto> getByAnyParam(Long id,

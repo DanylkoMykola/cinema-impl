@@ -51,11 +51,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     public void delete(Long id) {
-        if (movieRepo.existsById(id)) {
-            movieRepo.deleteById(id);
-        }  else {
-            throw new NotFoundException(NOT_FOUND + id);
-        }
+        movieRepo.deleteById(id);
     }
 
    public Page<MovieWithOrderDto> getByAnyParam(Long id, String name, LocalDate releaseDate) {
