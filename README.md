@@ -1,6 +1,6 @@
 # This cinema implementation with embedded h2 database
 
-To run this project you need to do ```git pull``` and then you can open it in your IDE and run. H2 database will be created automatically and available on ```http://localhost:8080/h2-console```
+To run this project you need to do ```git clone``` and then you can open it in your IDE and run. H2 database will be created automatically and available on ```http://localhost:8080/h2-console```
 
 ### Endpoints
 Movie:
