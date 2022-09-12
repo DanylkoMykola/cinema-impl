@@ -1,10 +1,12 @@
 package com.example.cinemaimpl.service.impl;
 
+import com.example.cinemaimpl.dto.CustomPage;
 import com.example.cinemaimpl.dto.OrderWithMovieDto;
 import com.example.cinemaimpl.entity.Order;
 import com.example.cinemaimpl.entity.Order_;
 import com.example.cinemaimpl.exception.NotFoundException;
 import com.example.cinemaimpl.repository.OrderRepository;
+import com.example.cinemaimpl.repository.OrderSearchCriteria;
 import com.example.cinemaimpl.service.OrderService;
 import com.example.cinemaimpl.specification.OrderSpecification;
 import lombok.AllArgsConstructor;
@@ -54,19 +56,15 @@ public class OrderServiceImpl implements OrderService {
         orderRepo.deleteById(id);
     }
 
-   public Page<OrderWithMovieDto> getByAnyParam(Long id,
-                                                String costomerName,
-                                                BigDecimal price,
-                                                LocalDateTime startDate,
-                                                LocalDateTime endDate) {
+   public Page<OrderWithMovieDto> getByAnyParam(OrderSearchCriteria orderSearchCriteria, CustomPage customPage) {
        List<OrderWithMovieDto> orders = orderRepo.findAll(Specification
-                       .where(orderSpec.hasId(id)
-                               .or(orderSpec.hasName(costomerName))
-                               .or(orderSpec.hasPrice(price))
-                               .or(orderSpec.hasReleaseDateBetween(startDate, endDate)))).stream()
+                       .where(orderSpec.hasId(orderSearchCriteria.getId())
+                               .or(orderSpec.hasName(orderSearchCriteria.getCustomerName()))
+                               .or(orderSpec.hasPrice(orderSearchCriteria.getPrice()))
+                               .or(orderSpec.hasReleaseDateBetween(orderSearchCriteria.getStartDate(), orderSearchCriteria.getEndDate())))).stream()
                .map(order -> mapper.map(order, OrderWithMovieDto.class))
                .collect(Collectors.toList());
-       return new PageImpl<>(orders, PageRequest.of(0,5, Sort.by(Order_.CUSTOMER_NAME)), orders.size());
+       return new PageImpl<>(orders, PageRequest.of(customPage.getPageNumber(), customPage.getPageSize(), Sort.by(customPage.getSortBy())), orders.size());
 
    }
 }

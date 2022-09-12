@@ -1,7 +1,9 @@
 package com.example.cinemaimpl.controller;
 
+import com.example.cinemaimpl.dto.CustomPage;
 import com.example.cinemaimpl.dto.MovieWithOrderDto;
 import com.example.cinemaimpl.dto.MovieDto;
+import com.example.cinemaimpl.repository.MovieSearchCriteria;
 import com.example.cinemaimpl.service.MovieService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,10 +27,8 @@ public class MovieController {
     }
 
     @GetMapping("/param")
-    public ResponseEntity<Page<MovieWithOrderDto>> getByAnyValue(@RequestParam(required = false) Long id,
-                                                                 @RequestParam(required = false) String name,
-                                                                 @RequestParam(required = false) LocalDate releaseDate) {
-        return ResponseEntity.status(HttpStatus.OK).body(movieService.getByAnyParam(id, name, releaseDate ));
+    public ResponseEntity<Page<MovieWithOrderDto>> getByAnyValue(MovieSearchCriteria criteria, CustomPage page) {
+        return ResponseEntity.status(HttpStatus.OK).body(movieService.getByAnyParam(criteria, page));
     }
 
     @PostMapping()

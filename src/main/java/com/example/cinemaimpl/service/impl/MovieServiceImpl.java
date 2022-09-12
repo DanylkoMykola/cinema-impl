@@ -1,11 +1,13 @@
 package com.example.cinemaimpl.service.impl;
 
+import com.example.cinemaimpl.dto.CustomPage;
 import com.example.cinemaimpl.dto.MovieDto;
 import com.example.cinemaimpl.dto.MovieWithOrderDto;
 import com.example.cinemaimpl.entity.Movie;
 import com.example.cinemaimpl.entity.Movie_;
 import com.example.cinemaimpl.exception.NotFoundException;
 import com.example.cinemaimpl.repository.MovieRepository;
+import com.example.cinemaimpl.repository.MovieSearchCriteria;
 import com.example.cinemaimpl.service.MovieService;
 import com.example.cinemaimpl.specification.MovieSpecification;
 import lombok.AllArgsConstructor;
@@ -54,14 +56,14 @@ public class MovieServiceImpl implements MovieService {
         movieRepo.deleteById(id);
     }
 
-   public Page<MovieWithOrderDto> getByAnyParam(Long id, String name, LocalDate releaseDate) {
+   public Page<MovieWithOrderDto> getByAnyParam(MovieSearchCriteria criteria, CustomPage page) {
        List<MovieWithOrderDto> movies = movieRepo.findAll(Specification
-                       .where(movieSpec.hasId(id)
-                               .or(movieSpec.hasName(name))
-                               .or(movieSpec.hasReleaseDate(releaseDate)))).stream()
+                       .where(movieSpec.hasId(criteria.getId())
+                               .or(movieSpec.hasName(criteria.getName()))
+                               .or(movieSpec.hasReleaseDate(criteria.getReleaseDate())))).stream()
                .map(movie -> mapper.map(movie, MovieWithOrderDto.class))
                .collect(Collectors.toList());
-       return new PageImpl<>(movies, PageRequest.of(0,5, Sort.by(Movie_.NAME)), movies.size());
+       return new PageImpl<>(movies, PageRequest.of(page.getPageNumber(), page.getPageSize(), Sort.by(page.getSortBy())), movies.size());
 
    }
 }
