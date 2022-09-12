@@ -55,14 +55,13 @@ public class MovieServiceImpl implements MovieService {
     }
 
    public Page<MovieWithOrderDto> getByAnyParam(Long id, String name, LocalDate releaseDate) {
-       Page<Movie> moviePages = movieRepo.findAll(Specification
+       List<MovieWithOrderDto> movies = movieRepo.findAll(Specification
                        .where(movieSpec.hasId(id)
                                .or(movieSpec.hasName(name))
-                               .or(movieSpec.hasReleaseDate(releaseDate))),
-               PageRequest.of(0,5, Sort.by(Movie_.NAME)));
-       List<MovieWithOrderDto> movieWithOrderDtoList = moviePages.stream().map(movie -> mapper.map(movie, MovieWithOrderDto.class))
+                               .or(movieSpec.hasReleaseDate(releaseDate)))).stream()
+               .map(movie -> mapper.map(movie, MovieWithOrderDto.class))
                .collect(Collectors.toList());
-       return new PageImpl<>(movieWithOrderDtoList, moviePages.getPageable(), moviePages.getTotalElements());
+       return new PageImpl<>(movies, PageRequest.of(0,5, Sort.by(Movie_.NAME)), movies.size());
 
    }
 }

@@ -59,15 +59,14 @@ public class OrderServiceImpl implements OrderService {
                                                 BigDecimal price,
                                                 LocalDateTime startDate,
                                                 LocalDateTime endDate) {
-       Page<Order> orderPages = orderRepo.findAll(Specification
+       List<OrderWithMovieDto> orders = orderRepo.findAll(Specification
                        .where(orderSpec.hasId(id)
                                .or(orderSpec.hasName(costomerName))
                                .or(orderSpec.hasPrice(price))
-                               .or(orderSpec.hasReleaseDateBetween(startDate, endDate))),
-               PageRequest.of(0,5, Sort.by(Order_.CUSTOMER_NAME)));
-       List<OrderWithMovieDto> orderWithMovieDtoList = orderPages.stream().map(Order -> mapper.map(Order, OrderWithMovieDto.class))
+                               .or(orderSpec.hasReleaseDateBetween(startDate, endDate)))).stream()
+               .map(order -> mapper.map(order, OrderWithMovieDto.class))
                .collect(Collectors.toList());
-       return new PageImpl<>(orderWithMovieDtoList, orderPages.getPageable(), orderPages.getTotalElements());
+       return new PageImpl<>(orders, PageRequest.of(0,5, Sort.by(Order_.CUSTOMER_NAME)), orders.size());
 
    }
 }
