@@ -3,7 +3,6 @@ package com.example.cinemaimpl.controller;
 import com.example.cinemaimpl.service.OrderService;
 import com.example.cinemaimpl.utils.MockData;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,21 +34,19 @@ class OrderControllerTest {
     }
 
     @Test
-    @SneakyThrows
-    void getById() {
+    void getById() throws Exception {
         mockMvc.perform(get("/order/1")).andExpect(status().isOk());
 
         verify( orderService).getById(1L);
     }
 
     @Test
-    void getByAnyValue() {
-        //TODO
+    void getByAnyValue() throws Exception {
+        mockMvc.perform(get("/order/param?id=3&customerName=Tom")).andExpect(status().isOk());
     }
 
     @Test
-    @SneakyThrows
-    void create() {
+    void create() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
         String requestBody = objectMapper.writeValueAsString(MockData.getOrderWithMovieDto());
@@ -64,12 +60,23 @@ class OrderControllerTest {
     }
 
     @Test
-    void update() {
-        //TODO
+    void update() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.findAndRegisterModules();
+        String requestBody = objectMapper.writeValueAsString(MockData.getOrderWithMovieDto());
+
+        mockMvc.perform(put("/order")
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        verify(orderService).update(MockData.getOrderWithMovieDto());
     }
 
     @Test
-    void delete() {
-        //TODO
+    void deleteByIdTest() throws Exception {
+        mockMvc.perform(delete("/order/1" )).andExpect(status().isOk());
+
+        verify( orderService).deleteByID(1L);
     }
 }

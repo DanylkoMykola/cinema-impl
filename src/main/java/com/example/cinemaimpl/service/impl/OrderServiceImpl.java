@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         return mapper.map(orderRepo.save(order), OrderWithMovieDto.class);
     }
 
-    public void delete(Long id) {
+    public void deleteByID(Long id) {
         orderRepo.deleteById(id);
     }
 

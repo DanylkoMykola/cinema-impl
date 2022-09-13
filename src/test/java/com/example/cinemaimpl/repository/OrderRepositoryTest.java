@@ -35,19 +35,16 @@ class OrderRepositoryTest {
     @Test
     void findByAnyValue() {
         Page<Order> orderPages =  orderRepo.findAll(Specification
-                        .where(orderSpec.hasId(1L)
-                                .or(orderSpec.hasName("Tom"))
-                                .or(orderSpec.hasPrice(null))
-                                .or(orderSpec.hasOrderDateBetween(null, null))),
+                        .where(orderSpec.hasId(3L)
+                                .and(orderSpec.hasName("Tom"))
+                                .and(orderSpec.hasPrice(null))
+                                .and(orderSpec.hasOrderDateBetween(null, null))),
                 PageRequest.of(0,5, Sort.by(Order_.CUSTOMER_NAME)));
 
         List<Order> orders = orderPages.getContent();
 
-        assertEquals(2L, orderPages.getTotalElements());
-        assertEquals(1L, orders.get(0).getId());
-        assertEquals(3L, orders.get(1).getId());
-        assertEquals("Edward", orders.get(0).getCustomerName());
-        assertEquals("Tom", orders.get(1).getCustomerName());
+        assertEquals(1L, orderPages.getTotalElements());
+        assertEquals(3L, orders.get(0).getId());
+        assertEquals("Tom", orders.get(0).getCustomerName());
     }
-
 }
