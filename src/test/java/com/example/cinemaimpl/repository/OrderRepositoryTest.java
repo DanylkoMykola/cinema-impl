@@ -38,7 +38,7 @@ class OrderRepositoryTest {
                         .where(orderSpec.hasId(1L)
                                 .or(orderSpec.hasName("Tom"))
                                 .or(orderSpec.hasPrice(null))
-                                .or(orderSpec.hasReleaseDateBetween(null, null))),
+                                .or(orderSpec.hasOrderDateBetween(null, null))),
                 PageRequest.of(0,5, Sort.by(Order_.CUSTOMER_NAME)));
 
         List<Order> orders = orderPages.getContent();

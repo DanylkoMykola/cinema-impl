@@ -4,7 +4,6 @@ import com.example.cinemaimpl.dto.CustomPage;
 import com.example.cinemaimpl.dto.MovieDto;
 import com.example.cinemaimpl.dto.MovieWithOrderDto;
 import com.example.cinemaimpl.entity.Movie;
-import com.example.cinemaimpl.entity.Movie_;
 import com.example.cinemaimpl.exception.NotFoundException;
 import com.example.cinemaimpl.repository.MovieRepository;
 import com.example.cinemaimpl.repository.MovieSearchCriteria;
@@ -20,7 +19,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,8 +57,8 @@ public class MovieServiceImpl implements MovieService {
    public Page<MovieWithOrderDto> getByAnyParam(MovieSearchCriteria criteria, CustomPage page) {
        List<MovieWithOrderDto> movies = movieRepo.findAll(Specification
                        .where(movieSpec.hasId(criteria.getId())
-                               .or(movieSpec.hasName(criteria.getName()))
-                               .or(movieSpec.hasReleaseDate(criteria.getReleaseDate())))).stream()
+                               .and(movieSpec.hasName(criteria.getName()))
+                               .and(movieSpec.hasReleaseDate(criteria.getReleaseDate())))).stream()
                .map(movie -> mapper.map(movie, MovieWithOrderDto.class))
                .collect(Collectors.toList());
        return new PageImpl<>(movies, PageRequest.of(page.getPageNumber(), page.getPageSize(), Sort.by(page.getSortBy())), movies.size());

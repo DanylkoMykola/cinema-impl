@@ -19,9 +19,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.example.cinemaimpl.exception.constants.ErrorMessage.*;
@@ -57,14 +56,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
    public Page<OrderWithMovieDto> getByAnyParam(OrderSearchCriteria orderSearchCriteria, CustomPage customPage) {
-       List<OrderWithMovieDto> orders = orderRepo.findAll(Specification
+        List<OrderWithMovieDto> orders = orderRepo.findAll(Specification
                        .where(orderSpec.hasId(orderSearchCriteria.getId())
-                               .or(orderSpec.hasName(orderSearchCriteria.getCustomerName()))
-                               .or(orderSpec.hasPrice(orderSearchCriteria.getPrice()))
-                               .or(orderSpec.hasReleaseDateBetween(orderSearchCriteria.getStartDate(), orderSearchCriteria.getEndDate())))).stream()
+                               .and(orderSpec.hasName(orderSearchCriteria.getCustomerName()))
+                               .and(orderSpec.hasPrice(orderSearchCriteria.getPrice()))
+                               .and(orderSpec.hasOrderDateBetween(orderSearchCriteria.getStartDate(),
+                                       orderSearchCriteria.getEndDate())))).stream()
                .map(order -> mapper.map(order, OrderWithMovieDto.class))
                .collect(Collectors.toList());
-       return new PageImpl<>(orders, PageRequest.of(customPage.getPageNumber(), customPage.getPageSize(), Sort.by(customPage.getSortBy())), orders.size());
+       return new PageImpl<>(orders, PageRequest.of(customPage.getPageNumber(), customPage.getPageSize(),
+               Sort.by(Objects.nonNull(customPage.getSortBy()) ? customPage.getSortBy() : Order_.CUSTOMER_NAME)), orders.size());
 
    }
 }

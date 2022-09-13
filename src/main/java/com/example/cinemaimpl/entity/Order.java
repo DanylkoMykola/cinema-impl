@@ -33,7 +33,7 @@ public class Order {
     private BigDecimal price;
 
 
-    @ManyToOne( cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id", updatable = false)
     private Movie movie;
 
