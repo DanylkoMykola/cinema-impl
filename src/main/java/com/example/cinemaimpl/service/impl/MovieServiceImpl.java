@@ -57,10 +57,10 @@ public class MovieServiceImpl implements MovieService {
     }
 
    public Page<MovieWithOrderDto> getByAnyParam(MovieSearchCriteria criteria, CustomPage page) {
-       List<MovieWithOrderDto> movies = movieRepo.findAll(Specification
-                       .where(movieSpec.hasId(criteria.getId())
-                               .and(movieSpec.hasName(criteria.getName()))
-                               .and(movieSpec.hasReleaseDate(criteria.getReleaseDate())))).stream()
+       Specification<Movie> specification = Specification.where(movieSpec.hasId(criteria.getId())
+                       .and(movieSpec.hasName(criteria.getName()))
+                       .and(movieSpec.hasReleaseDate(criteria.getReleaseDate())));
+       List<MovieWithOrderDto> movies = movieRepo.findAll(specification).stream()
                .map(movie -> mapper.map(movie, MovieWithOrderDto.class))
                .collect(Collectors.toList());
        return new PageImpl<>(movies, PageRequest.of(page.getPageNumber(), page.getPageSize(),

@@ -37,6 +37,6 @@ public class Movie {
     @Column
     private LocalDate releaseDate;
 
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> orders;
 }

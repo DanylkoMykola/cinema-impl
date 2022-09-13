@@ -56,12 +56,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
    public Page<OrderWithMovieDto> getByAnyParam(OrderSearchCriteria orderSearchCriteria, CustomPage customPage) {
-        List<OrderWithMovieDto> orders = orderRepo.findAll(Specification
-                       .where(orderSpec.hasId(orderSearchCriteria.getId())
-                               .and(orderSpec.hasName(orderSearchCriteria.getCustomerName()))
-                               .and(orderSpec.hasPrice(orderSearchCriteria.getPrice()))
-                               .and(orderSpec.hasOrderDateBetween(orderSearchCriteria.getStartDate(),
-                                       orderSearchCriteria.getEndDate())))).stream()
+       Specification<Order> specification = Specification.where(orderSpec.hasId(orderSearchCriteria.getId())
+                       .and(orderSpec.hasName(orderSearchCriteria.getCustomerName()))
+                       .and(orderSpec.hasPrice(orderSearchCriteria.getPrice()))
+                       .and(orderSpec.hasOrderDateBetween(orderSearchCriteria.getStartDate(),
+                               orderSearchCriteria.getEndDate())));
+        List<OrderWithMovieDto> orders = orderRepo.findAll(specification).stream()
                .map(order -> mapper.map(order, OrderWithMovieDto.class))
                .collect(Collectors.toList());
        return new PageImpl<>(orders, PageRequest.of(customPage.getPageNumber(), customPage.getPageSize(),
