@@ -4,6 +4,7 @@ import com.example.cinemaimpl.dto.CustomPage;
 import com.example.cinemaimpl.dto.MovieDto;
 import com.example.cinemaimpl.dto.MovieWithOrderDto;
 import com.example.cinemaimpl.entity.Movie;
+import com.example.cinemaimpl.entity.Movie_;
 import com.example.cinemaimpl.exception.NotFoundException;
 import com.example.cinemaimpl.repository.MovieRepository;
 import com.example.cinemaimpl.repository.MovieSearchCriteria;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static com.example.cinemaimpl.exception.constants.ErrorMessage.NOT_FOUND;
@@ -61,7 +63,8 @@ public class MovieServiceImpl implements MovieService {
                                .and(movieSpec.hasReleaseDate(criteria.getReleaseDate())))).stream()
                .map(movie -> mapper.map(movie, MovieWithOrderDto.class))
                .collect(Collectors.toList());
-       return new PageImpl<>(movies, PageRequest.of(page.getPageNumber(), page.getPageSize(), Sort.by(page.getSortBy())), movies.size());
+       return new PageImpl<>(movies, PageRequest.of(page.getPageNumber(), page.getPageSize(),
+               Sort.by(Objects.nonNull(page.getSortBy()) ? page.getSortBy() : Movie_.NAME)), movies.size());
 
    }
 }

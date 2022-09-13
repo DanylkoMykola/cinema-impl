@@ -15,12 +15,12 @@ public class MovieSpecification {
 
 
     public Specification<Movie> hasId(Long id) {
-        return (root, cq, cb) -> Objects.isNull(id) ? null : cb.equal(root.get(Movie_.ID), id);
+        return (root, cq, cb) -> Objects.isNull(id) ? cb.conjunction() : cb.equal(root.get(Movie_.ID), id);
     }
     public Specification<Movie> hasName(String name) {
-        return (root, cq, cb) -> Objects.isNull(name) ? null : cb.like(root.get(Movie_.NAME), "%" + name + "%");
+        return (root, cq, cb) -> Objects.isNull(name) ? cb.conjunction() : cb.like(root.get(Movie_.NAME), "%" + name + "%");
     }
     public Specification<Movie> hasReleaseDate(LocalDate dateTime) {
-        return (root, cq, cb) -> Objects.isNull(dateTime) ? null : cb.equal(root.get(Movie_.RELEASE_DATE), dateTime);
+        return (root, cq, cb) -> Objects.isNull(dateTime) ? cb.conjunction() : cb.equal(root.get(Movie_.RELEASE_DATE), dateTime);
     }
 }
